@@ -35,3 +35,7 @@ export function is_good_enough(guess, x) {
 export function sqrt(x) {
     return sqrt_iter(1, x);
 }
+
+function is_even(n) {
+    return n % 2 === 0;
+}
