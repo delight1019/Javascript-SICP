@@ -39,3 +39,35 @@ export function sqrt(x) {
 function is_even(n) {
     return n % 2 === 0;
 }
+
+function gcd(a, b) {
+    return b === 0 ? a : gcd(b, a % b);
+}
+
+function divides(a, b) {
+    return b % a === 0;
+}
+
+function smallest_divisor(n) {
+    function find_divisor(test_divisor) {
+        return square(test_divisor) > n
+               ? n
+               : divides(test_divisor, n)
+               ? test_divisor
+               : find_divisor(test_divisor + 1);
+    }
+
+    return find_divisor(n, 2);
+}
+
+function is_prime(n) {
+    return n === smallest_divisor(n);
+}
+
+function expmod(base, exp, m) {
+    return exp === 0
+           ? 1
+           : is_even(exp)
+           ? square(expmod(base, exp / 2, m)) % m
+           : (base * expmod(base, exp - 1, m)) % m
+}
