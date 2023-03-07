@@ -1,3 +1,5 @@
+import { math_floor, math_random } from "sicp";
+
 export function square(x) {
     return x* x;
 }
@@ -36,38 +38,54 @@ export function sqrt(x) {
     return sqrt_iter(1, x);
 }
 
-function is_even(n) {
+export function is_even(n) {
     return n % 2 === 0;
 }
 
-function gcd(a, b) {
+export function gcd(a, b) {
     return b === 0 ? a : gcd(b, a % b);
 }
 
-function divides(a, b) {
+export function divides(a, b) {
     return b % a === 0;
 }
 
-function smallest_divisor(n) {
-    function find_divisor(test_divisor) {
-        return square(test_divisor) > n
-               ? n
-               : divides(test_divisor, n)
-               ? test_divisor
-               : find_divisor(test_divisor + 1);
-    }
+function find_divisor(n, test_divisor) {
+    return square(test_divisor) > n
+           ? n
+           : divides(test_divisor, n)
+           ? test_divisor
+           : find_divisor(n, test_divisor + 1);
+}
 
+export function smallest_divisor(n) {    
     return find_divisor(n, 2);
 }
 
-function is_prime(n) {
+export function is_prime(n) {
     return n === smallest_divisor(n);
 }
 
-function expmod(base, exp, m) {
+export function expmod(base, exp, m) {
     return exp === 0
            ? 1
            : is_even(exp)
            ? square(expmod(base, exp / 2, m)) % m
            : (base * expmod(base, exp - 1, m)) % m
+}
+
+export function fermat_test(n) {
+    function try_it(a) {
+        return expmod(a, n, n) === a;
+    }
+
+    return try_it(1 + math_floor(math_random() * (n - 1)));
+}
+
+export function fast_is_prime(n, times) {
+    return times === 0
+           ? true
+           : fermat_test(n)
+           ? fast_is_prime(n, times - 1)
+           : false;
 }
