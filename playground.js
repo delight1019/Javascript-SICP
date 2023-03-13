@@ -4,7 +4,7 @@ export function square(x) {
     return x* x;
 }
 
-export function cubic(x) {
+export function cube(x) {
     return x * x * x;
 }
 
@@ -88,4 +88,18 @@ export function fast_is_prime(n, times) {
            : fermat_test(n)
            ? fast_is_prime(n, times - 1)
            : false;
+}
+
+export function sum(term, a, next, b) {
+    return a > b
+           ? 0
+           : term(a) + sum(term, next(a), next, b);
+}
+
+export function inc(a) {
+    return a + 1;
+}
+
+export function identity(a) {
+    return a;
 }
