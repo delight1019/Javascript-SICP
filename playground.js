@@ -1,4 +1,4 @@
-import { math_floor, math_random } from "sicp";
+import { math_cos, math_floor, math_random, math_sin } from "sicp";
 
 export function square(x) {
     return x* x;
@@ -102,4 +102,61 @@ export function inc(a) {
 
 export function identity(a) {
     return a;
+}
+
+export function positive(x) {
+    return x > 0;
+}
+
+export function negative(x) {
+    return x < 0;
+}
+
+export function half_interval_method(f, a, b) {
+    function close_enough(x, y) {
+        return abs(x - y) < 0.001;
+    }
+
+    function search(f, neg_point, pos_point) {    
+        const midpoint = average(neg_point, pos_point);
+    
+        if (close_enough(neg_point, pos_point)) {
+            return midpoint;
+        }
+        else {
+            const test_value = f(midpoint);
+    
+            return positive(test_value)
+                   ? search(f, neg_point, midpoint)
+                   : negative(test_value)
+                   ? search(f, midpoint, pos_point)
+                   : midpoint;
+        }
+    }
+
+    const a_value = f(a);
+    const b_value = f(b);
+
+    return negative(a_value) && positive(b_value)
+           ? search(f, a, b)
+           : negative(b_value) && positive(a_value)
+           ? search(f, b, a)
+           : error("values are not of opposite sign");
+}
+
+export function fixed_point(f, first_guess) {
+    const tolerance = 0.00001;
+
+    function close_enough(x, y) {
+        return abs(x - y) < tolerance;
+    }
+
+    function try_with(guess) {
+        const next = f(guess);
+        return close_enough(guess, next)
+               ? next
+               : try_with(next);
+    }
+
+    return try_with(first_guess);
 }
