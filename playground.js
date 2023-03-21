@@ -160,3 +160,21 @@ export function fixed_point(f, first_guess) {
 
     return try_with(first_guess);
 }
+
+export function deriv(g) {
+    const dx = 0.0001;
+
+    return x => (g(x + dx) - g(x) / dx);
+}
+
+export function newtons_method(g, guess) {
+    function newton_transform() {
+        return x => x - g(x) / deriv(g)(x);
+    }
+
+    return fixed_point(newton_transform(g), guess);
+}
+
+export function fixed_point_of_transform(g, transform, guess) {
+    return fixed_point(transform(g), guess);
+}
