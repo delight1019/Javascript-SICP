@@ -175,6 +175,21 @@ export function newtons_method(g, guess) {
     return fixed_point(newton_transform(g), guess);
 }
 
+export function average_damp(f) {
+    return x => average(x, f(x));
+}
+
 export function fixed_point_of_transform(g, transform, guess) {
     return fixed_point(transform(g), guess);
+}
+
+export function compose(f, g) {
+    return x => f(g(x));
+}
+
+export function repeated(f, n) {
+    return x =>
+           n === 1
+           ? f(x)
+           : compose(f, repeated(f, n - 1))(x);
 }
